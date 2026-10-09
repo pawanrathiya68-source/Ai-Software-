@@ -92,8 +92,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- Mock Chat Functionality ---
-    chatForm.addEventListener('submit', (e) => {
+    // --- AI Chat Functionality ---
+    chatForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const message = chatInput.value.trim();
         if (!message) return;
@@ -105,32 +105,58 @@ document.addEventListener('DOMContentLoaded', () => {
         chatInput.value = '';
         chatInput.style.height = 'auto';
 
-        // Disable input while "thinking"
+        // Disable input and show loading state
         const submitBtn = chatForm.querySelector('button[type="submit"]');
         submitBtn.disabled = true;
         chatInput.disabled = true;
 
-        // Scroll to bottom
+        const loadingId = 'loading-' + Date.now();
+        appendMessage('ai', '<span class="animate-pulse">Nexus Assistant is thinking...</span>', loadingId);
         scrollToBottom();
 
-        // 2. Simulate AI Delay then respond
-        setTimeout(() => {
-            const aiResponse = "I am a simulated frontend interface. Real AI capabilities are not yet configured for this platform. Please connect a backend AI service to process your message: \"" + message + "\"";
-            appendMessage('ai', aiResponse);
+        // 2. Call Backend API
+        try {
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ message })
+            });
 
+            const data = await response.json();
+
+            // Remove loading message
+            removeMessage(loadingId);
+
+            if (response.ok) {
+                appendMessage('ai', data.reply);
+            } else {
+                appendMessage('error', data.error || 'Failed to communicate with AI server.');
+            }
+        } catch (error) {
+            console.error('Chat API Error:', error);
+            removeMessage(loadingId);
+            appendMessage('error', 'Network error. Please make sure the server is running.');
+        } finally {
             // Re-enable input
             submitBtn.disabled = false;
             chatInput.disabled = false;
             chatInput.focus();
-
-            // Scroll to bottom
             scrollToBottom();
-        }, 800); // 800ms delay to feel slightly real
+        }
     });
 
-    function appendMessage(sender, text) {
+    function removeMessage(id) {
+        const el = document.getElementById(id);
+        if (el) el.remove();
+    }
+
+    function appendMessage(sender, text, id = null) {
         const msgDiv = document.createElement('div');
         msgDiv.className = sender === 'user' ? 'flex gap-4 max-w-3xl ml-auto flex-row-reverse' : 'flex gap-4 max-w-3xl';
+
+        if (id) msgDiv.id = id;
 
         let avatarHtml = '';
         let bubbleHtml = '';
@@ -149,16 +175,32 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </div>
             `;
-        } else {
+        } else if (sender === 'ai') {
             avatarHtml = `
                 <div class="w-8 h-8 rounded-full bg-primary flex-shrink-0 flex items-center justify-center text-white mt-1">
                     <i class="fa-solid fa-robot text-sm"></i>
                 </div>
             `;
+            // If it's the loading state with HTML, don't escape it. Otherwise escape.
+            const content = id && text.includes('animate-pulse') ? text : escapeHTML(text).replace(/\n/g, '<br>');
             bubbleHtml = `
                 <div class="flex flex-col gap-1">
                     <span class="text-xs font-semibold text-gray-500">Nexus Assistant</span>
                     <div class="bg-gray-100 text-gray-800 p-3 rounded-2xl rounded-tl-none text-sm md:text-base border border-gray-200 shadow-sm">
+                        <p>${content}</p>
+                    </div>
+                </div>
+            `;
+        } else if (sender === 'error') {
+            avatarHtml = `
+                <div class="w-8 h-8 rounded-full bg-red-500 flex-shrink-0 flex items-center justify-center text-white mt-1">
+                    <i class="fa-solid fa-triangle-exclamation text-sm"></i>
+                </div>
+            `;
+            bubbleHtml = `
+                <div class="flex flex-col gap-1">
+                    <span class="text-xs font-semibold text-red-500">System Error</span>
+                    <div class="bg-red-50 text-red-800 p-3 rounded-2xl rounded-tl-none text-sm md:text-base border border-red-200 shadow-sm">
                         <p>${escapeHTML(text)}</p>
                     </div>
                 </div>
