@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Nexus | All-in-One AI Platform</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#6366f1', // Indigo 500
+                        secondary: '#4f46e5', // Indigo 600
+                        dark: '#1e1e2d',
+                        darker: '#151521',
+                        surface: '#2b2b40'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans h-screen overflow-hidden flex">
+
+    <!-- Mobile Overlay -->
+    <div id="mobile-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-20 hidden md:hidden"></div>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="bg-white text-gray-700 w-64 flex flex-col h-full border-r border-gray-200 transition-transform duration-300 ease-in-out fixed md:relative z-30 transform -translate-x-full md:translate-x-0">
+        <!-- Logo -->
+        <div class="h-16 flex items-center px-6 border-b border-gray-200">
+            <div class="flex items-center gap-3 text-primary">
+                <i class="fa-solid fa-brain text-2xl"></i>
+                <span class="text-xl font-bold tracking-tight text-gray-900">AI Nexus</span>
+            </div>
+            <!-- Mobile Close Button -->
+            <button id="close-sidebar" class="ml-auto md:hidden text-gray-500 hover:text-gray-800">
+                <i class="fa-solid fa-times text-xl"></i>
+            </button>
+        </div>
+
+        <!-- Navigation -->
+        <div class="flex-1 overflow-y-auto py-4 px-3">
+            <nav class="space-y-1">
+                <!-- Nav Items -->
+                <a href="#" data-target="dashboard-view" class="nav-item active flex items-center px-3 py-2.5 rounded-lg text-sm font-medium text-primary bg-indigo-50 hover:bg-indigo-50 hover:text-primary transition-colors">
+                    <i class="fa-solid fa-border-all w-6 text-center mr-2"></i>
+                    Dashboard
+                </a>
+                <a href="#" data-target="chat-view" class="nav-item flex items-center px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors">
+                    <i class="fa-solid fa-message w-6 text-center mr-2"></i>
+                    AI Chat
+                </a>
+                <a href="#" data-target="image-view" class="nav-item flex items-center px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors">
+                    <i class="fa-solid fa-image w-6 text-center mr-2"></i>
+                    Image Studio
+                </a>
+                <a href="#" data-target="coding-view" class="nav-item flex items-center px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors">
+                    <i class="fa-solid fa-code w-6 text-center mr-2"></i>
+                    Coding Assistant
+                </a>
+                <a href="#" data-target="writing-view" class="nav-item flex items-center px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors">
+                    <i class="fa-solid fa-pen-nib w-6 text-center mr-2"></i>
+                    AI Writing
+                </a>
+                <a href="#" data-target="video-view" class="nav-item flex items-center px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors">
+                    <i class="fa-solid fa-video w-6 text-center mr-2"></i>
+                    Video Studio
+                </a>
+                <a href="#" data-target="document-view" class="nav-item flex items-center px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors">
+                    <i class="fa-solid fa-file-lines w-6 text-center mr-2"></i>
+                    Document Assistant
+                </a>
+
+                <div class="pt-4 mt-4 border-t border-gray-200">
+                    <p class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">System</p>
+                    <a href="#" data-target="settings-view" class="nav-item flex items-center px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors">
+                        <i class="fa-solid fa-gear w-6 text-center mr-2"></i>
+                        Settings
+                    </a>
+                </div>
+            </nav>
+        </div>
+
+        <!-- User Profile (Bottom) -->
+        <div class="p-4 border-t border-gray-200">
+            <div class="flex items-center gap-3">
+                <img src="https://ui-avatars.com/api/?name=User&background=6366f1&color=fff" alt="User Avatar" class="w-10 h-10 rounded-full">
+                <div>
+                    <p class="text-sm font-medium text-gray-900">Pro User</p>
+                    <p class="text-xs text-gray-500">Free Plan</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col h-full min-w-0 bg-gray-50">
+
+        <!-- Top Navbar -->
+        <header class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 md:px-6 shrink-0 z-10">
+            <div class="flex items-center gap-4">
+                <button id="mobile-menu-btn" class="md:hidden text-gray-500 hover:text-gray-700 focus:outline-none">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+                <h2 id="current-view-title" class="text-lg font-semibold text-gray-800">Dashboard</h2>
+            </div>
+            <div class="flex items-center gap-4">
+                <button class="text-gray-500 hover:text-primary transition-colors relative">
+                    <i class="fa-regular fa-bell text-xl"></i>
+                    <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Viewport -->
+        <main class="flex-1 overflow-y-auto p-4 md:p-6 relative">
+
+            <!-- Dashboard View -->
+            <div id="dashboard-view" class="view-section active">
+                <div class="mb-6">
+                    <h1 class="text-2xl font-bold text-gray-900">Welcome to AI Nexus</h1>
+                    <p class="text-gray-500 mt-1">What would you like to create today?</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Tool Cards -->
+                    <div class="tool-card bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all cursor-pointer group" onclick="switchView('chat-view')">
+                        <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center text-xl mb-4 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                            <i class="fa-solid fa-message"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">AI Chat</h3>
+                        <p class="text-sm text-gray-500">Advanced conversational AI for general queries, research, and ideation.</p>
+                    </div>
+
+                    <div class="tool-card bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all cursor-pointer group" onclick="switchView('image-view')">
+                        <div class="w-12 h-12 bg-purple-50 text-purple-600 rounded-lg flex items-center justify-center text-xl mb-4 group-hover:bg-purple-600 group-hover:text-white transition-colors">
+                            <i class="fa-solid fa-image"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Image Studio</h3>
+                        <p class="text-sm text-gray-500">Generate high-quality images from text descriptions.</p>
+                    </div>
+
+                    <div class="tool-card bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all cursor-pointer group" onclick="switchView('coding-view')">
+                        <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-lg flex items-center justify-center text-xl mb-4 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                            <i class="fa-solid fa-code"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Coding Assistant</h3>
+                        <p class="text-sm text-gray-500">Write, debug, and refactor code with AI suggestions.</p>
+                    </div>
+
+                    <div class="tool-card bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all cursor-pointer group" onclick="switchView('writing-view')">
+                        <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-lg flex items-center justify-center text-xl mb-4 group-hover:bg-amber-600 group-hover:text-white transition-colors">
+                            <i class="fa-solid fa-pen-nib"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">AI Writing</h3>
+                        <p class="text-sm text-gray-500">Generate articles, emails, and marketing copy effortlessly.</p>
+                    </div>
+
+                    <div class="tool-card bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all cursor-pointer group" onclick="switchView('video-view')">
+                        <div class="w-12 h-12 bg-red-50 text-red-600 rounded-lg flex items-center justify-center text-xl mb-4 group-hover:bg-red-600 group-hover:text-white transition-colors">
+                            <i class="fa-solid fa-video"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Video Studio</h3>
+                        <p class="text-sm text-gray-500">Create and edit short videos using AI tools.</p>
+                    </div>
+
+                    <div class="tool-card bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all cursor-pointer group" onclick="switchView('document-view')">
+                        <div class="w-12 h-12 bg-cyan-50 text-cyan-600 rounded-lg flex items-center justify-center text-xl mb-4 group-hover:bg-cyan-600 group-hover:text-white transition-colors">
+                            <i class="fa-solid fa-file-lines"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Document Assistant</h3>
+                        <p class="text-sm text-gray-500">Summarize, analyze, and chat with your PDF documents.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat View -->
+            <div id="chat-view" class="view-section hidden h-full flex flex-col absolute inset-0 md:p-6 bg-white md:bg-transparent">
+                <div class="flex-1 bg-white md:rounded-xl md:shadow-sm md:border md:border-gray-200 flex flex-col overflow-hidden">
+                    <!-- Chat Header -->
+                    <div class="h-14 border-b border-gray-200 flex items-center px-4 md:px-6 bg-white shrink-0">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white">
+                                <i class="fa-solid fa-robot"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-800 text-sm">Nexus Assistant</h3>
+                                <p class="text-xs text-green-500 flex items-center gap-1">
+                                    <span class="w-2 h-2 rounded-full bg-green-500 inline-block"></span> Online
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chat Messages Area -->
+                    <div id="chat-messages" class="flex-1 overflow-y-auto p-4 md:p-6 bg-gray-50 md:bg-white space-y-6">
+                        <!-- Welcome Message -->
+                        <div class="flex gap-4 max-w-3xl">
+                            <div class="w-8 h-8 rounded-full bg-primary flex-shrink-0 flex items-center justify-center text-white mt-1">
+                                <i class="fa-solid fa-robot text-sm"></i>
+                            </div>
+                            <div class="flex flex-col gap-1">
+                                <span class="text-xs font-semibold text-gray-500">Nexus Assistant</span>
+                                <div class="bg-gray-100 text-gray-800 p-3 rounded-2xl rounded-tl-none text-sm md:text-base border border-gray-200">
+                                    <p>Hello! I'm your AI Nexus Assistant. How can I help you today?</p>
+                                    <div class="mt-3 p-3 bg-yellow-50 border border-yellow-200 rounded-lg text-yellow-800 text-xs md:text-sm flex gap-2 items-start">
+                                        <i class="fa-solid fa-triangle-exclamation mt-0.5"></i>
+                                        <p><strong>Note:</strong> Real AI integration is not configured yet. This is a frontend demonstration.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chat Input Area -->
+                    <div class="p-3 md:p-4 bg-white border-t border-gray-200 shrink-0">
+                        <form id="chat-form" class="max-w-4xl mx-auto relative flex items-end gap-2 bg-gray-50 rounded-2xl border border-gray-300 p-2 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all">
+                            <button type="button" class="p-2 text-gray-400 hover:text-gray-600 rounded-full shrink-0">
+                                <i class="fa-solid fa-paperclip"></i>
+                            </button>
+                            <textarea id="chat-input" rows="1" class="w-full bg-transparent border-none focus:ring-0 resize-none max-h-32 py-2 text-sm md:text-base text-gray-800" placeholder="Message Nexus..."></textarea>
+                            <button type="submit" class="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center shrink-0 hover:bg-secondary transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                                <i class="fa-solid fa-paper-plane text-sm ml-[-2px]"></i>
+                            </button>
+                        </form>
+                        <div class="text-center mt-2 text-xs text-gray-400">
+                            AI can make mistakes. Consider verifying important information.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Placeholder Views -->
+            <div id="image-view" class="view-section hidden h-full">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 h-full flex flex-col items-center justify-center text-center">
+                    <div class="w-20 h-20 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center text-4xl mb-6">
+                        <i class="fa-solid fa-image"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Image Studio</h2>
+                    <p class="text-gray-500 max-w-md">The Image Studio feature is under development. Soon you will be able to generate stunning visuals using AI.</p>
+                </div>
+            </div>
+
+            <div id="coding-view" class="view-section hidden h-full">
+                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 h-full flex flex-col items-center justify-center text-center">
+                    <div class="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-4xl mb-6">
+                        <i class="fa-solid fa-code"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Coding Assistant</h2>
+                    <p class="text-gray-500 max-w-md">Your AI pair programmer is getting ready. Check back soon for intelligent code completion and debugging.</p>
+                </div>
+            </div>
+
+            <div id="writing-view" class="view-section hidden h-full">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 h-full flex flex-col items-center justify-center text-center">
+                    <div class="w-20 h-20 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center text-4xl mb-6">
+                        <i class="fa-solid fa-pen-nib"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">AI Writing</h2>
+                    <p class="text-gray-500 max-w-md">The content generation suite is coming soon.</p>
+                </div>
+            </div>
+
+            <div id="video-view" class="view-section hidden h-full">
+                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 h-full flex flex-col items-center justify-center text-center">
+                    <div class="w-20 h-20 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-4xl mb-6">
+                        <i class="fa-solid fa-video"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Video Studio</h2>
+                    <p class="text-gray-500 max-w-md">Video generation and editing capabilities are planned for a future update.</p>
+                </div>
+            </div>
+
+            <div id="document-view" class="view-section hidden h-full">
+                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 h-full flex flex-col items-center justify-center text-center">
+                    <div class="w-20 h-20 bg-cyan-100 text-cyan-600 rounded-full flex items-center justify-center text-4xl mb-6">
+                        <i class="fa-solid fa-file-lines"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Document Assistant</h2>
+                    <p class="text-gray-500 max-w-md">PDF and document analysis features will be available shortly.</p>
+                </div>
+            </div>
+
+            <div id="settings-view" class="view-section hidden h-full">
+                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 h-full flex flex-col items-center justify-center text-center">
+                    <div class="w-20 h-20 bg-gray-100 text-gray-600 rounded-full flex items-center justify-center text-4xl mb-6">
+                        <i class="fa-solid fa-gear"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Settings</h2>
+                    <p class="text-gray-500 max-w-md">Account and platform preferences.</p>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
